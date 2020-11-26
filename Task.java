@@ -13,8 +13,11 @@ public class Task
 {
 
     public String title;
-    protected int time, start, end, repeat;
-    protected boolean active;
+    public boolean active;
+    public int time, start, end, repeat;
+
+
+    public Task () { }
 
     /**
      * Task class constructor for a one-time tasks
@@ -289,6 +292,93 @@ public class Task
         return nt;
     }
 
+    @Override
+    public Task clone() throws CloneNotSupportedException
+    {
+        Task task = new Task();
 
+        task.title = this.title;
+        task.active = this.active;
+
+        if (this.isRepeated())
+        {
+            task.start = this.start;
+            task.end = this.end;
+            task.repeat = this.repeat;
+        }
+        else
+        {
+            task.time = this.time;
+            task.start = this.time;
+            task.end = this.time;
+        }
+
+        return task;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = title.hashCode();
+        int act = active ? 1 : 0;
+
+        result = result * 31 + act;
+
+        if (this.isRepeated())
+        {
+            result = result * 31 + start;
+            result = result * 31 + end;
+            result = result * 31 + repeat;
+        }
+        else
+        {
+            result = result * 31 + time;
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+
+        Task other = (Task) obj;
+
+        if (title != other.title || active != other.active)
+        {
+            return false;
+        }
+
+        if (this.isRepeated())
+        {
+            if(start != other.start || end != other.end || repeat != other.repeat)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(time != other.time)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
